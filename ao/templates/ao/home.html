@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head><title>山荘粟生</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    {% load static %}
+        <style> 
+            @font-face {
+                font-family: 'keifont'; /*fontの名前を定義*/
+                src: url("{% static 'ao/fonts/keifont.ttf' %}") format('truetype');
+            }
+
+            a{text-decoration: none;}
+
+            .word1{
+                font-size: 50px;
+                font-family: 'keifont',sans-serif;/*keifontが使えない場合はsans-serifにフォールバック*/
+            }
+
+            .word2{
+                    font-size: 30px;
+                    color: white; /* テキストの色を白に設定 */
+            }
+            .word2:hover{
+                    text-decoration:  underline;
+            }
+            
+            
+            .word3{
+                    font-size: 30px;
+                    color: white; /* テキストの色を白に設定 */
+                        
+            }
+            .word3:hover{
+                     text-decoration:  underline;
+            }
+
+            .word4{
+                    font-size: 30px;
+                    color: white; /* テキストの色を白に設定 */
+                        
+            }
+            .word4:hover{
+                     text-decoration:  underline;
+            }
+
+            .word5{
+                    font-size: 30px;
+                    color: white; /* テキストの色を白に設定 */
+                        
+            }
+            .word5:hover{
+                     text-decoration:  underline;
+            }
+
+            .rectatop {
+            width: 100%; /* 横幅 */
+            height: 70px; /* 縦幅 */
+            background-color: #800000; /* 背景色をワインレッドに設定 */
+            display: flex;  /* 子要素を中央配置するためにflexboxを使用 */
+            align-items: center; /* 縦方向の中央揃え */
+            justify-content: space-evenly; /* 子要素を均等に配置 */ 
+            }
+
+            .main-image-container {
+            display: flex;
+            justify-content: center; /* 横方向の中央揃え */
+            align-items: center; /* 縦方向の中央揃え */
+            margin: 30px auto; /* 上下に余白を追加 */
+            height: 700px; /* 写真の高さを指定 */
+            }
+            .main-image-container img {
+            max-width: 90%; /* 写真の最大幅を90%に設定 */
+            max-height: 100%; /* 写真の最大高さを100%に設定 */
+            object-fit: cover; /* アスペクト比を維持しながら写真を収める */
+            border-radius: 10px; /* 角を少し丸くする */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 写真に影を追加 */
+            }
+          
+                /* スライドショーの画像を隠す */
+            .image-slide {
+                opacity: 0.3; /* 非アクティブな画像は透明度を0.3に設定 */
+                transition: opacity 1s ease; /* 透明度が変化する際にアニメーションを追加 */
+                transform: scale(0.8); /* 非アクティブな画像は少し小さく表示 */
+            }
+
+            .image-slide.active {
+                opacity: 1;
+                transform: scale(1) translateX(0); /* アクティブな画像は元のサイズで表示 */
+            }
+
+            /* ナビゲーションボタン */
+            .prev, .next {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: rgba(0, 0, 0, 0.5);
+                color: white;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                font-size: 20px;
+            }
+
+            .prev {
+                left: 10px;
+            }
+
+            .next {
+                right: 10px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="word1">山荘粟生</div>
+        <div class="rectatop">
+            <a href="{% url 'home' %}"><div class="word2">ホーム</div></a>  
+            <a href="{% url 'resa' %}"><div class="word3">予約</div></a>  
+            <a href="{% url 'contact' %}"><div class="word4">お問い合わせ</div></a>    
+            <a href="{% url 'test' %}"><div class="word5">テストページ</div></a> 
+        </div>
+        <div class="main-image-container">
+            <img class="image-slide active" src="{% static 'ao/images/S__214065164_0.jpg' %}" alt="メインイメージ">
+            <img class="image-slide" src="{% static 'ao/images/S__214065157_0.jpg' %}" alt="メインイメージ">
+            <img class="image-slide" src="{% static 'ao/images/S__214065159_0.jpg' %}" alt="メインイメージ">
+
+            <!-- 前へボタン -->
+            <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+            <!-- 次へボタン -->
+            <button class="next" onclick="moveSlide(1)">&#10095;</button>
+        </div>
+        
+        <script>
+            let currentSlide = 0; // 現在のスライドのインデックス
+    
+            // すべての画像を取得
+            const slides = document.querySelectorAll('.image-slide');
+    
+            // スライドを移動させる関数
+            function moveSlide(step) {
+                // 現在のスライドを非表示にする
+                slides[currentSlide].classList.remove('active');
+                
+                // 新しいスライドインデックスを計算
+                currentSlide = (currentSlide + step + slides.length) % slides.length;
+                
+                // 新しいスライドを表示
+                slides[currentSlide].classList.add('active');
+            }
+            
+            // 自動でスライドショーを切り替える機能（オプション）
+            setInterval(() => {
+                moveSlide(1);
+            }, 3000); // 3秒ごとにスライドを切り替え
+        </script>
+    </body> 
+    
+
+</html>
