@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>山荘粟生</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    {% load static %}
+    <style>
+        @font-face {
+            font-family: 'keifont';
+            src: url("{% static 'ao/fonts/keifont.ttf' %}") format('truetype');
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .word1 {
+            font-size: 50px;
+            font-family: 'keifont', sans-serif;
+        }
+
+        .word2 {
+            font-size: 30px;
+            color: white;
+        }
+
+        .word2:hover {
+            text-decoration: underline;
+        }
+
+        .word3 {
+            font-size: 30px;
+            color: white;
+        }
+
+        .word3:hover {
+            text-decoration: underline;
+        }
+
+        .word4 {
+            font-size: 30px;
+            color: white;
+        }
+
+        .word4:hover {
+            text-decoration: underline;
+        }
+
+        .word5 {
+            font-size: 30px;
+            color: white;
+        }
+
+        .word5:hover {
+            text-decoration: underline;
+        }
+
+        .rectatop {
+            width: 100%;
+            height: 70px;
+            background-color: #800000;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .main-image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px auto;
+            height: 700px;
+        }
+
+        .main-image-container img {
+            width: 33%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1s ease;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ナビゲーションボタン */
+        .left, .right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .left {
+            left: 10px;
+        }
+
+        .right {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="word1">山荘粟生</div>
+    <div class="rectatop">
+        <a href="{% url 'home' %}"><div class="word2">ホーム</div></a>
+        <a href="{% url 'resa' %}"><div class="word3">予約</div></a>
+        <a href="{% url 'contact' %}"><div class="word4">お問い合わせ</div></a>
+        <a href="{% url 'test' %}"><div class="word5">テストページ</div></a>
+    </div>
+    <div class="main-image-container">
+        <img class="image" src="{% static 'ao/images/S__214065164_0.jpg' %}" alt="Image 1">
+        <img class="image" src="{% static 'ao/images/S__214065157_0.jpg' %}" alt="Image 2">
+        <img class="image" src="{% static 'ao/images/S__214065159_0.jpg' %}" alt="Image 3">
+    </div>
+
+    aaa
+
+    <!-- 左へボタン -->
+    <button class="left" onclick="moveSlide(-1)">&#10094;</button>
+    <!-- 右へボタン -->
+    <button class="right" onclick="moveSlide(1)">&#10095;</button>
+
+    <script>
+        let currentOrder = [0, 1, 2]; // 初期の順番 (1, 2, 3)
+
+        function moveSlide(step) {
+            // 順番を変更（次へまたは前へのローテーション）
+            if (step === 1) {
+                currentOrder = [
+                    currentOrder[2],  // 3番目が1番目に
+                    currentOrder[0],  // 1番目が2番目に
+                    currentOrder[1]   // 2番目が3番目に
+                ];
+            } else if (step === -1) {
+                currentOrder = [
+                    currentOrder[1],  // 2番目が1番目に
+                    currentOrder[0],  // 1番目が2番目に
+                    currentOrder[2]   // 3番目が3番目のまま
+                ];
+            }
+
+            // 画像の順番を変更
+            const images = document.querySelectorAll('.main-image-container img');
+            images.forEach((img, index) => {
+                img.style.transform = `translateX(${currentOrder[index] * -100}%)`; // 画像を左にスライド
+            });
+        }
+
+        // 初期状態では0%, 100%, 200%の位置に画像を配置
+        window.onload = function() {
+            const images = document.querySelectorAll('.main-image-container img');
+            images[0].style.transform = 'translateX(0)';
+            images[1].style.transform = 'translateX(100%)';
+            images[2].style.transform = 'translateX(200%)';
+        };
+    </script>
+</body>
+</html>

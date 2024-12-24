@@ -6,3 +6,9 @@ def home(request):
 
 def reservation(request):
     return render(request, 'ao/reservation.html')
+
+def contact(request):
+    return render(request, 'ao/contact.html')
+
+def test(request):
+    return render(request, 'ao/test.html')
