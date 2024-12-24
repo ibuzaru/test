@@ -10,49 +10,56 @@
             }
 
             a{text-decoration: none;}
+
             body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            max-width: 400px;
-            margin: 20px auto;
-        }
-        .calendar-header {
-            grid-column: span 7;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .day, .weekday {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-        .weekday {
-            background-color: #f0f0f0;
-            font-weight: bold;
-        }
-        .day {
-            background-color: #f4f4f4;
-            cursor: pointer;
-        }
-        .day:hover {
-            background-color: #e0e0e0;
-        }
-        .day.disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-        .selected {
-            background-color: #4caf50;
-            color: white;
-        }
+                font-family: Arial, sans-serif;
+                text-align: center;
+                margin: 0;
+                padding: 0;
+            }
+            .calendar-container{
+                font-size: 30px;
+            }
+            .calendar {
+                display: grid;
+                grid-template-columns: repeat(7, 1fr);
+                gap: 5px;
+                max-width: 400px;
+                margin: 20px auto;
+            }
+            .calendar-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: stretch;
+            }
+            .current-month{
+                font-size: 30px;
+                color: black;
+            }
+            .day, .weekday {
+                padding: 10px;
+                text-align: center;
+                border: 2px solid #ddd;
+            }
+            .weekday {
+                background-color: #f0f0f0;
+                font-weight: bold;
+            }
+            .day {
+                background-color: #f4f4f4;
+                cursor: pointer;
+            }
+            .day:hover {
+                background-color: #e0e0e0;
+            }
+            .day.disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+            }
+            .selected {
+                background-color: #4caf50;
+                color: white;
+            }
             .word1{
                 font-size: 50px;
                 font-family: 'keifont',sans-serif;/*keifontが使えない場合はsans-serifにフォールバック*/
@@ -93,9 +100,6 @@
             align-items: center; /* 縦方向の中央揃え */
             justify-content: space-evenly; /* 子要素を均等に配置 */
 
-                
-               
-               
             }
 
         </style>
@@ -111,8 +115,8 @@
         <h1>予約カレンダー</h1>
         <div class="calendar-container">
             <div class="calendar-header">
-                <button id="prev-month">&gt;</button>
-                <h2 id="current-month"></h2>
+                <button id="prev-month">&lt;</button>
+                <div class="current-month" id="current-month"></div>
                 <button id="next-month">&gt;</button>
             </div>
             <div class="calendar" id="calendar"></div>
@@ -151,13 +155,13 @@
     
                 // Number of days in the month
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
-    
-                // Add empty cells for days before the first day of the month
+                
+                // 各月の曜日の日付調整
                 for (let i = 0; i < firstDay; i++) {
                     const emptyCell = document.createElement('div');
                     calendar.appendChild(emptyCell);
                 }
-    
+
                 // Add days of the month
                 for (let day = 1; day <= daysInMonth; day++) {
                     const dayElement = document.createElement('div');
@@ -169,7 +173,8 @@
                     const currentDate = new Date(year, month, day);
                     if (currentDate < today.setHours(0, 0, 0, 0)) {
                         dayElement.classList.add('disabled');
-                    } else {
+                    } 
+                    else {
                         dayElement.addEventListener('click', () => {
                             document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
                             dayElement.classList.add('selected');
