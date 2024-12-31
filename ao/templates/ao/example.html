@@ -1,0 +1,58 @@
+<form method="post">
+    {% csrf_token %}
+    <p>
+        {{ form.name.label_tag }}<br>
+        {{ form.name }}
+    </p>
+    <p>
+        {{ form.furigana.label_tag }}<br>
+        {{ form.furigana }}
+    </p>
+    <p>
+        {{ form.email.label_tag }}<br>
+        {{ form.email }}
+    </p>
+    <p>
+        {{ form.phone_number.label_tag }}<br>
+        {{ form.phone_number }}
+    </p>
+    <p>
+        {{ form.postal_code.label_tag }}<br>
+        {{ form.postal_code }}<br>
+        <button type="button" id="search-address">住所検索</button>
+    </p>
+    <p>
+        {{ form.address.label_tag }}<br>
+        {{ form.address }}
+    </p>
+    <button type="submit">Submit</button>
+    <div class="important">*は必須</div>
+</form>
+
+<script>
+    document.getElementById('search-address').addEventListener('click', function() {
+        const postalCode = document.querySelector('input[name="postal_code"]').value;
+        if (!/^\d{3}-\d{4}$/.test(postalCode)) {
+            alert("郵便番号はXXX-XXXX形式で入力してください");
+            return;
+        }
+
+        // 郵便番号APIの呼び出し
+        fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postalCode}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.results) {
+                    const address = data.results[0].address1 + data.results[0].address2 + data.results[0].address3;
+                    document.querySelector('textarea[name="address"]').value = address;
+                } else {
+                    alert("住所が見つかりませんでした");
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching address:", error);
+                alert("住所検索でエラーが発生しました");
+            });
+    });
+</script>
+
+
