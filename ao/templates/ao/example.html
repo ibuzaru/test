@@ -1,6 +1,14 @@
 <form method="post">
     {% csrf_token %}
     <p>
+        <strong>チェックイン日: </strong><span id="display-checkin">未選択</span><br>
+        <input type="hidden" id="checkin-date" name="checkin_date">
+    </p>
+    <p>
+        <strong>チェックアウト日: </strong><span id="display-checkout">未選択</span><br>
+        <input type="hidden" id="checkout-date" name="checkout_date">
+    </p>
+    <p>
         {{ form.name.label_tag }}<br>
         {{ form.name }}
     </p>
@@ -30,7 +38,7 @@
 </form>
 
 <script>
-    document.getElementById('search-address').addEventListener('click', function() {
+    document.getElementById('search-address').addEventListener('click', function () {
         const postalCode = document.querySelector('input[name="postal_code"]').value;
         if (!/^\d{3}-\d{4}$/.test(postalCode)) {
             alert("郵便番号はXXX-XXXX形式で入力してください");
@@ -53,6 +61,38 @@
                 alert("住所検索でエラーが発生しました");
             });
     });
+
+    const displayCheckin = document.getElementById('display-checkin');
+    const displayCheckout = document.getElementById('display-checkout');
+    const checkinDateInput = document.getElementById('checkin-date');
+    const checkoutDateInput = document.getElementById('checkout-date');
+    let checkinDate = null;
+    let checkoutDate = null;
+
+    function handleDateSelection(currentDate, dayElement) {
+        if (!checkinDate || (checkinDate && checkoutDate)) {
+            checkinDate = currentDate;
+            checkoutDate = null;
+            checkinDateInput.value = checkinDate.toISOString().slice(0, 10);
+            checkoutDateInput.value = '';
+            displayCheckin.textContent = checkinDate.toISOString().slice(0, 10);
+            displayCheckout.textContent = '未選択';
+
+            document.querySelectorAll('.day').forEach(el => el.classList.remove('selected', 'selected-out'));
+            dayElement.classList.add('selected');
+        } else if (!checkoutDate && currentDate > checkinDate) {
+            checkoutDate = currentDate;
+            checkoutDateInput.value = checkoutDate.toISOString().slice(0, 10);
+            displayCheckout.textContent = checkoutDate.toISOString().slice(0, 10);
+            dayElement.classList.add('selected-out');
+        }
+    }
+
+    document.querySelectorAll('.day').forEach(dayElement => {
+        const currentDate = new Date(); // ここにカレンダーの日付を関連付けて使用
+        dayElement.addEventListener('click', () => handleDateSelection(currentDate, dayElement));
+    });
 </script>
+
 
 
