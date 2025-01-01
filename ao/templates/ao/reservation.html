@@ -12,13 +12,15 @@
 
         a { text-decoration: none; }
 
-        .word2,.word3,.word4,.word5{
-                        font-size: 20px;
-                        color: white; /* テキストの色を白に設定 */
-                }
-        .word2:hover,.word3:hover,.word4:hover,.word5:hover{
-                        text-decoration:  underline;
-                }
+        .word2, .word3, .word4, .word5 {
+            font-size: 20px;
+            color: white;
+        }
+
+        .word2:hover, .word3:hover, .word4:hover, .word5:hover {
+            text-decoration: underline;
+        }
+
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -39,16 +41,16 @@
         .calendar-header {
             display: flex;
             justify-content: space-between;
-            align-items: stretch;
+            align-items: center;
         }
+
         .prev, .next {
-                background-color: rgba(0, 0, 0, 0.5);
-                color: white;
-                border: none;
-                cursor: pointer;
-                font-size: 20px;
-                background-color: #800000;
-                }
+            background-color: #800000;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+        }
 
         .current-month { font-size: 30px; color: black; }
 
@@ -97,16 +99,16 @@
     <h1>予約カレンダー</h1>
     <div class="calendar-container">
         <div class="calendar-header">
-            <button class ="prev" id="prev-month">&lt;</button>
+            <button class="prev" id="prev-month">&lt;</button>
             <div class="current-month" id="current-month"></div>
-            <button class ="next" id="next-month">&gt;</button>
+            <button class="next" id="next-month">&gt;</button>
         </div>
         <div class="calendar" id="calendar"></div>
     </div>
     <form method="post" action="{% url 'example' %}">
         {% csrf_token %}
-        <input type="text" id="checkin-date" name="checkin_date" readonly placeholder="チェックイン日">
-        <input type="text" id="checkout-date" name="checkout_date" readonly placeholder="チェックアウト日">
+        <input type="text" id="checkin-date" name="check_in_date" readonly placeholder="チェックイン日">
+        <input type="text" id="checkout-date" name="check_out_date" readonly placeholder="チェックアウト日">
         <button type="submit">予約へ進む</button>
     </form>
 
@@ -119,8 +121,8 @@
         const checkoutDateInput = document.getElementById('checkout-date');
 
         let date = new Date();
-        let checkinDate = null;
-        let checkoutDate = null;
+        let checkInDate = null;
+        let checkOutDate = null;
 
         const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -155,16 +157,16 @@
                     dayElement.classList.add('disabled');
                 } else {
                     dayElement.addEventListener('click', () => {
-                        if (!checkinDate || (checkinDate && checkoutDate)) {
-                            checkinDate = currentDate;
-                            checkoutDate = null;
-                            checkinDateInput.value = checkinDate.toISOString().slice(0, 10);
+                        if (!checkInDate || (checkInDate && checkOutDate)) {
+                            checkInDate = currentDate;
+                            checkOutDate = null;
+                            checkinDateInput.value = checkInDate.toISOString().slice(0, 10);
                             checkoutDateInput.value = '';
                             document.querySelectorAll('.day').forEach(el => el.classList.remove('selected', 'selected-out'));
                             dayElement.classList.add('selected');
-                        } else if (!checkoutDate && currentDate > checkinDate) {
-                            checkoutDate = currentDate;
-                            checkoutDateInput.value = checkoutDate.toISOString().slice(0, 10);
+                        } else if (!checkOutDate && currentDate > checkInDate) {
+                            checkOutDate = currentDate;
+                            checkoutDateInput.value = checkOutDate.toISOString().slice(0, 10);
                             dayElement.classList.add('selected-out');
                         }
                     });
@@ -188,3 +190,4 @@
     </script>
 </body>
 </html>
+
