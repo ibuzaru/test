@@ -3,6 +3,8 @@ from .models import ExampleModel
 import re
 
 class ExampleForm(forms.ModelForm):
+
+
     PEOPLE_CHOICES = [(str(i), f"{i}人") for i in range(1, 7)]  # 1～6人の選択肢
     people = forms.ChoiceField(
             choices=PEOPLE_CHOICES,
@@ -11,15 +13,21 @@ class ExampleForm(forms.ModelForm):
     )
     class Meta:
         model = ExampleModel
-        fields = ["name", "furigana", "people", "email", "phone_number", "postal_code", "address"]
+        fields = [
+            "check_in_date","check_out_date",
+            "name", "furigana", "people", "email",
+            "phone_number", "postal_code", "address"
+        ]
 
     # フィールドごとに日本語のラベルを設定
+    check_in_date = forms.CharField(label="チェックイン日" )
+    check_out_date = forms.CharField(label="チェックアウト日" )
     name = forms.CharField(label="名前", max_length=50)
     furigana = forms.CharField(label="フリガナ", max_length=50)
-    email = forms.EmailField(label="メールアドレス")
+    email = forms.EmailField(label="メールアドレス(gmail,yahoo,icloudのみ有効)")
     phone_number = forms.CharField(label="電話番号", max_length=15)
-    postal_code = forms.CharField(label="郵便番号", max_length=8)
-    address = forms.CharField(label="住所", widget=forms.Textarea)
+    postal_code = forms.CharField(label="郵便番号", max_length=7)
+    address = forms.CharField(label="住所", max_length=50)
 
 
     

@@ -105,20 +105,36 @@
         </div>
         <div class="calendar" id="calendar"></div>
     </div>
-    <form method="post" action="{% url 'example' %}">
+    <form method="get" action="{% url 'example' %}">
         {% csrf_token %}
-        <input type="text" id="checkin-date" name="check_in_date" readonly placeholder="チェックイン日">
-        <input type="text" id="checkout-date" name="check_out_date" readonly placeholder="チェックアウト日">
-        <button type="submit">予約へ進む</button>
+        <input type="text" id="checkin-date" name="check_in" readonly placeholder="チェックイン日" >
+        <input type="text" id="checkout-date" name="check_out" readonly placeholder="チェックアウト日" >
+        <button type="submit" id="submit-button">予約へ進む</button>
     </form>
+    
+    
 
     <script>
+        const submitButton = document.getElementById('submit-button');
+        const checkinDateInput = document.getElementById('checkin-date');
+        const checkoutDateInput = document.getElementById('checkout-date');
+    
+        submitButton.addEventListener('click', (event) => {
+            if (!checkinDateInput.value) {
+                alert("チェックイン日を選択してください。");
+                event.preventDefault(); // フォーム送信をキャンセル
+            } 
+            else if (!checkoutDateInput.value) {
+                alert("チェックアウト日を選択してください。");
+                event.preventDefault(); // フォーム送信をキャンセル
+            }
+        });
+
         const calendar = document.getElementById('calendar');
         const currentMonth = document.getElementById('current-month');
         const prevMonthButton = document.getElementById('prev-month');
         const nextMonthButton = document.getElementById('next-month');
-        const checkinDateInput = document.getElementById('checkin-date');
-        const checkoutDateInput = document.getElementById('checkout-date');
+
 
         let date = new Date();
         let checkInDate = null;

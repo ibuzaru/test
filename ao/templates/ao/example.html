@@ -1,11 +1,13 @@
 <form method="post">
     {% csrf_token %}
-    {% if check_in_date and check_out_date %}
-        <div>
-            <p>チェックイン日: {{ check_in_date }}</p>
-            <p>チェックアウト日: {{ check_out_date }}</p>
-        </div>
-    {% endif %}
+    <p>
+        {{ form.check_in_date.label_tag }}<br>
+        {{ form.check_in_date }}
+    </p>
+    <p>
+        {{ form.check_out_date.label_tag }}<br>
+        {{ form.check_out_date }}
+    </p>
     <p>
         {{ form.name.label_tag }}<br>
         {{ form.name }}
@@ -35,22 +37,18 @@
         {{ form.address.label_tag }}<br>
         {{ form.address }}
     </p>
-
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">予約確認へ</button>
-    </form>
-    
-
-    
-   
+    <button type="submit">予約確認へ</button>
 </form>
 
 <script>
     document.getElementById('search-address').addEventListener('click', function () {
-        const postalCode = document.querySelector('input[name="postal_code"]').value;
-        if (!/^\d{3}-\d{4}$/.test(postalCode)) {
-            alert("郵便番号はXXX-XXXX形式で入力してください");
+        // 入力された郵便番号を取得
+        const postalCodeInput = document.querySelector('input[name="postal_code"]');
+        const postalCode = postalCodeInput.value.trim();
+
+        // 郵便番号の形式を検証（ハイフンなし7桁）
+        if (!/^\d{7}$/.test(postalCode)) {
+            alert("郵便番号はハイフン無しで入力してください（例: 1234567）");
             return;
         }
 
@@ -59,46 +57,22 @@
             .then(response => response.json())
             .then(data => {
                 if (data.results) {
-                    const address = data.results[0].address1 + data.results[0].address2 + data.results[0].address3;
+                    const result = data.results[0];
+                    const address = `${result.address1} ${result.address2} ${result.address3}`;
                     document.querySelector('textarea[name="address"]').value = address;
                 } else {
-                    alert("住所が見つかりませんでした");
+                    alert("住所が見つかりませんでした。郵便番号を確認してください。");
                 }
             })
             .catch(error => {
                 console.error("Error fetching address:", error);
-                alert("住所検索でエラーが発生しました");
+                alert("住所検索でエラーが発生しました。");
             });
     });
 
-    const displayCheckin = document.getElementById('display-checkin');
-    const displayCheckout = document.getElementById('display-checkout');
-    const checkinDateInput = document.getElementById('checkin-date');
-    const checkoutDateInput = document.getElementById('checkout-date');
-    let checkinDate = null;
-    let checkoutDate = null;
-
-    function handleDateSelection(currentDate, dayElement) {
-        if (!checkinDate || (checkinDate && checkoutDate)) {
-            checkinDate = currentDate;
-            checkoutDate = null;
-            checkinDateInput.value = checkinDate.toISOString().slice(0, 10);
-            checkoutDateInput.value = '';
-            displayCheckin.textContent = checkinDate.toISOString().slice(0, 10);
-            displayCheckout.textContent = '未選択';
-
-            document.querySelectorAll('.day').forEach(el => el.classList.remove('selected', 'selected-out'));
-            dayElement.classList.add('selected');
-        } else if (!checkoutDate && currentDate > checkinDate) {
-            checkoutDate = currentDate;
-            checkoutDateInput.value = checkoutDate.toISOString().slice(0, 10);
-            displayCheckout.textContent = checkoutDate.toISOString().slice(0, 10);
-            dayElement.classList.add('selected-out');
-        }
-    }
-
 
 </script>
+
 
 
 
