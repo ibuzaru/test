@@ -23,9 +23,14 @@ def example(request):
             form.save()  # データを保存
             return redirect('example_confirm')  # 保存後にリダイレクト
     else:
-        form = ExampleForm()
+        check_in = request.GET.get('check_in', '')
+        check_out = request.GET.get('check_out', '')
+        form = ExampleForm(initial={'check_in_date': check_in, 'check_out_date': check_out})
 
     return render(request, "ao/example.html", {"form": form})
+
+def example_confirm(request):
+    return render(request, 'ao/example_confirm.html')
 
 
 

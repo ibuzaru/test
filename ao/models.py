@@ -18,8 +18,8 @@ MEMBERS = [
    ('1', '1人'),('2', '2人'), ('3', '3人'), ('4', '4人'), ('5', '5人'), ('6', '6人')
 ]
 class ExampleModel(models.Model):
-    check_in_date = models.TextField(max_length=20, null=True, blank=True)
-    check_out_date = models.TextField(max_length=20, null=True, blank=True)
+    check_in_date = models.CharField(max_length=15, null=True, blank=True)
+    check_out_date = models.CharField(max_length=15, null=True, blank=True)
     name = models.CharField(max_length=20, null=True, blank=True)
     furigana = models.CharField(max_length=20, null=True, blank=True)
     people = models.CharField(max_length=3, choices=MEMBERS, null=True, blank=True,)
