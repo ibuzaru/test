@@ -17,13 +17,16 @@
     <p><strong>住所:</strong> {{ data.address }}</p>
     <form method="post" action="{% url 'example_confirm' %}">
         {% csrf_token %}
-        <!-- 隠しフィールドでデータを再送 -->
+        <button type="submit">予約確定</button>
+    </form>
+    <!-- 修正するボタン -->
+    <form method="post" action="{% url 'example_fix' %}">
+        {% csrf_token %}
         {% for key, value in data.items %}
         <input type="hidden" name="{{ key }}" value="{{ value }}">
         {% endfor %}
-        <button type="submit">予約確定</button>
+        <button type="submit">修正する</button>
     </form>
-    <a href="{% url 'example' %}">修正する</a>
 </body>
 </html>
 

@@ -37,7 +37,7 @@
         {{ form.address.label_tag }}<br>
         {{ form.address }}
     </p>
-    <button type="submit">予約確認へ</button>
+    <button type="submit" >予約確認へ</button>
 </form>
 
 <script>
@@ -45,13 +45,20 @@ document.getElementById('search-address').addEventListener('click', function () 
     const postalCodeInput = document.querySelector('input[name="postal_code"]');
     const postalCode = postalCodeInput.value.trim();
 
+    // 郵便番号の形式を検証（ハイフンなし7桁）
     if (!/^\d{7}$/.test(postalCode)) {
         alert("郵便番号はハイフン無しで入力してください（例: 1234567)");
         return;
     }
 
+    // 郵便番号APIの呼び出し
     fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postalCode}`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             if (data && data.results) {
                 const result = data.results[0];
@@ -62,6 +69,9 @@ document.getElementById('search-address').addEventListener('click', function () 
                 } else {
                     console.error("Address field not found in the form.");
                 }
+            } else if (data.message) {
+                // APIが返すエラーメッセージを表示
+                alert(`エラー: ${data.message}`);
             } else {
                 alert("住所が見つかりませんでした。郵便番号を確認してください。");
             }
@@ -71,6 +81,7 @@ document.getElementById('search-address').addEventListener('click', function () 
             alert("住所検索でエラーが発生しました。");
         });
 });
+
 
 
 </script>

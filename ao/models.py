@@ -1,6 +1,7 @@
 # models.py
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 def validate_email(value):
    if 'gmail.com' in value:
@@ -27,7 +28,8 @@ class ExampleModel(models.Model):
     phone_number = models.CharField(max_length=15,null=True, blank=True)
     postal_code = models.CharField(max_length=7,null=True, blank=True)  # 郵便番号用
     address = models.TextField(null=True, blank=True)  # 住所用
-
+    created_at = models.DateTimeField(null=True, blank=True,auto_now_add=True)  # 初回作成時に自動でセット
+    updated_at = models.DateTimeField(null=True, blank=True,auto_now=True) 
     def __str__(self):
         return self.name
 

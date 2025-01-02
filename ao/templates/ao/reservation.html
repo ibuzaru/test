@@ -112,8 +112,6 @@
         <button type="submit" id="submit-button">予約へ進む</button>
     </form>
     
-    
-
     <script>
         const submitButton = document.getElementById('submit-button');
         const checkinDateInput = document.getElementById('checkin-date');
@@ -129,19 +127,18 @@
                 event.preventDefault(); // フォーム送信をキャンセル
             }
         });
-
+    
         const calendar = document.getElementById('calendar');
         const currentMonth = document.getElementById('current-month');
         const prevMonthButton = document.getElementById('prev-month');
         const nextMonthButton = document.getElementById('next-month');
-
-
+    
         let date = new Date();
         let checkInDate = null;
         let checkOutDate = null;
-
+    
         const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-
+    
         function renderCalendar() {
             calendar.innerHTML = '';
             const year = date.getFullYear();
@@ -153,23 +150,25 @@
                 weekdayElement.classList.add('weekday');
                 calendar.appendChild(weekdayElement);
             });
-
+    
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-
+    
             for (let i = 0; i < firstDay; i++) {
                 const emptyCell = document.createElement('div');
                 calendar.appendChild(emptyCell);
             }
-
+    
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayElement = document.createElement('div');
                 dayElement.textContent = day;
                 dayElement.classList.add('day');
-
-                const currentDate = new Date(year, month, day);
-
-                if (currentDate < new Date().setHours(0, 0, 0, 0)) {
+    
+                const currentDate = new Date(year, month, day+1);
+                const today = new Date(); // 今日の日付を取得
+                
+                // 現在の日付より前の日付は無効にする
+                if (currentDate < today) {
                     dayElement.classList.add('disabled');
                 } else {
                     dayElement.addEventListener('click', () => {
@@ -187,23 +186,26 @@
                         }
                     });
                 }
-
+    
                 calendar.appendChild(dayElement);
             }
         }
-
+    
         prevMonthButton.addEventListener('click', () => {
             date.setMonth(date.getMonth() - 1);
             renderCalendar();
         });
-
+    
         nextMonthButton.addEventListener('click', () => {
             date.setMonth(date.getMonth() + 1);
             renderCalendar();
         });
-
+    
         renderCalendar();
     </script>
+    
+   
+    
 </body>
 </html>
 

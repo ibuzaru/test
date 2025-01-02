@@ -20,12 +20,27 @@ def example(request):
     if request.method == 'POST':
         form = ExampleForm(request.POST)
         if form.is_valid():
-            form_data = form.cleaned_data  # フォームの入力データを取得
-            return render(request, 'ao/example_confirm.html', {'data': form_data})  # 予約確認ページに渡す
+            # フォームが有効な場合はデータを確認画面に渡す
+            form_data = form.cleaned_data
+            return render(request, 'ao/example_confirm.html', {'data': form_data})
+
     else:
         check_in = request.GET.get('check_in', '')
         check_out = request.GET.get('check_out', '')
         form = ExampleForm(initial={'check_in_date': check_in, 'check_out_date': check_out})
+
+    return render(request, "ao/example.html", {"form": form})
+
+
+def example_fix(request):
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)  # 送信されたデータをフォームに渡す
+        if form.is_valid():
+            # フォームが有効な場合はデータを確認画面に渡す
+            form_data = form.cleaned_data
+            return render(request, 'ao/example.html', {'data': form_data})
+    else:
+        form = ExampleForm()  # 初回アクセス時は空のフォーム
 
     return render(request, "ao/example.html", {"form": form})
 

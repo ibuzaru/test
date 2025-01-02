@@ -18,7 +18,6 @@ class ExampleForm(forms.ModelForm):
             "name", "furigana", "people", "email",
             "phone_number", "postal_code", "address"
         ]
-
     # フィールドごとに日本語のラベルを設定
     check_in_date = forms.CharField( label="チェックイン日"  , max_length=15  )
     check_out_date = forms.CharField( label="チェックアウト日", max_length=15  )
@@ -28,6 +27,7 @@ class ExampleForm(forms.ModelForm):
     phone_number = forms.CharField(label="電話番号", max_length=15)
     postal_code = forms.CharField(label="郵便番号", max_length=7)
     address = forms.CharField(label="住所", max_length=50)
+
 
 
     
