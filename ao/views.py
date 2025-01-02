@@ -20,8 +20,8 @@ def example(request):
     if request.method == 'POST':
         form = ExampleForm(request.POST)
         if form.is_valid():
-            form.save()  # データを保存
-            return redirect('example_confirm')  # 保存後にリダイレクト
+            form_data = form.cleaned_data  # フォームの入力データを取得
+            return render(request, 'ao/example_confirm.html', {'data': form_data})  # 予約確認ページに渡す
     else:
         check_in = request.GET.get('check_in', '')
         check_out = request.GET.get('check_out', '')
@@ -29,8 +29,18 @@ def example(request):
 
     return render(request, "ao/example.html", {"form": form})
 
+
 def example_confirm(request):
-    return render(request, 'ao/example_confirm.html')
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            form.save()  # データを保存
+            return redirect('home')  # 保存後にホームへリダイレクト
+        else:
+            # バリデーションエラー時は再度確認画面を表示
+            return render(request, 'ao/example_confirm.html', {'data': request.POST})
+    return redirect('example')  # 不正なアクセス時にフォーム入力ページへリダイレクト
+
 
 
 
