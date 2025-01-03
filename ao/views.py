@@ -3,6 +3,8 @@ from .forms import ExampleForm
 from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
+from django.template.loader import render_to_string  # メール本文生成
+from django.contrib import messages  # アラートメッセージ用
 
 def home(request):
     return render(request, 'ao/home.html')
@@ -45,17 +47,41 @@ def example_fix(request):
         form = ExampleForm()
         return render(request, "ao/example.html", {"form": form})
 
-
 def example_confirm(request):
     if request.method == 'POST':
         form = ExampleForm(request.POST)
-        if form.is_valid():
-            form.save()  # データを保存
-            return redirect('home')  # 保存後にホームへリダイレクト
+        if form.is_valid():  # フォームが正しく送信されたか確認
+            # フォームデータの保存
+            form.save()
+
+            # メール送信
+            email = form.cleaned_data.get('email')  # フォームからメールアドレスを取得
+            message = (
+                f"チェックイン日: {form.cleaned_data.get('check_in_date')}\n"
+                f"チェックアウト日: {form.cleaned_data.get('check_out_date')}\n"
+                f"名前: {form.cleaned_data.get('name')}\n"
+                f"ふりがな: {form.cleaned_data.get('furigana')}\n"
+                f"予約人数: {form.cleaned_data.get('people')}\n"
+                f"メールアドレス: {form.cleaned_data.get('email')}\n"
+                f"電話番号: {form.cleaned_data.get('phone_number')}\n"
+                f"郵便番号: {form.cleaned_data.get('postal_code')}\n"
+                f"住所: {form.cleaned_data.get('address')}\n"
+            )
+            send_mail(
+                subject='予約内容確認',
+                message=message,
+                from_email='your-email@gmail.com',  # 送信元メールアドレス
+                recipient_list=[email],  # フォームに入力されたメールアドレス
+                fail_silently=False,
+            )
+
+            # 成功時のレンダリング
+            return render(request, 'ao/home.html', {'form': form})
         else:
-            # バリデーションエラー時は再度確認画面を表示
-            return render(request, 'ao/example_confirm.html', {'data': request.POST})
-    return redirect('example')  # 不正なアクセス時にフォーム入力ページへリダイレクト
+            # バリデーションエラーが発生した場合
+            return render(request, 'ao/example.html', {'form': form, 'errors': form.errors})
+
+
 
 
 

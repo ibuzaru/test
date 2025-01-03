@@ -3,6 +3,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
+
 def validate_email(value):
    if 'gmail.com' in value:
        return value
@@ -33,6 +34,8 @@ class ExampleModel(models.Model):
     def __str__(self):
         return self.name
 
+
+    
 
 
 

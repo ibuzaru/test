@@ -12,21 +12,40 @@
 
         a { text-decoration: none; }
 
-        .word2, .word3, .word4, .word5 {
+        .rectatop {
+            width: 100%;
+            height: 50px;
+            background-color: #800000;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        .word2, .word3, .word4{
             font-size: 20px;
             color: white;
         }
 
-        .word2:hover, .word3:hover, .word4:hover, .word5:hover {
+        .word2:hover, .word3:hover, .word4:hover{
             text-decoration: underline;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
+        .box-container{
+            width: 100%;
+            height: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
+
+        .word5{
+            font-size: large;
+            font-weight: bold;
+        }
+        .word6{
+            font-size: medium;
+        }
+
 
         .calendar-container { font-size: 30px; }
 
@@ -40,7 +59,7 @@
 
         .calendar-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-evenly;
             align-items: center;
         }
 
@@ -49,15 +68,16 @@
             color: white;
             border: none;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 30px;
         }
 
         .current-month { font-size: 30px; color: black; }
 
         .day, .weekday {
-            padding: 10px;
+            
+            padding: 8px;
             text-align: center;
-            border: 2px solid #ddd;
+            border: 1px solid #ddd;
         }
 
         .weekday {
@@ -80,14 +100,19 @@
         .selected { background-color: #4caf50; color: white; }
         .selected-out { background-color: #ff7043; color: white; }
 
-        .rectatop {
-            width: 100%;
-            height: 70px;
-            background-color: #800000;
+
+        form {
             display: flex;
-            align-items: center;
-            justify-content: space-evenly;
-        }
+            flex-direction: column;
+            gap: 10px;
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+         }
     </style>
 </head>
 <body>
@@ -96,7 +121,11 @@
         <a href="{% url 'resa' %}"><div class="word3">予約</div></a>
         <a href="{% url 'contact' %}"><div class="word4">お問い合わせ</div></a>
     </div>
-    <h1>予約カレンダー</h1>
+    <div class="box-container">
+        <div class="word5">予約カレンダー</div>
+        <div class="word6">~カレンダーの日付を押してください~</div>
+    </div>
+
     <div class="calendar-container">
         <div class="calendar-header">
             <button class="prev" id="prev-month">&lt;</button>
